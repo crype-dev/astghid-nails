@@ -4,9 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { services } from "@/data/site";
 
 type SlotsResponse = {
-  configuredCalendar: boolean;
   slots: string[];
-  booked: string[];
 };
 
 type BookingStatus =
@@ -41,7 +39,11 @@ export function BookingForm() {
       setStatus({ type: "idle", message: "" });
 
       try {
-        const response = await fetch(`/api/appointments?date=${date}`, {
+        const params = new URLSearchParams({
+          date,
+          serviceDuration: String(selectedService.duration),
+        });
+        const response = await fetch(`/api/availability?${params.toString()}`, {
           cache: "no-store",
         });
         const data = (await response.json()) as SlotsResponse;
@@ -76,7 +78,7 @@ export function BookingForm() {
     return () => {
       ignore = true;
     };
-  }, [date]);
+  }, [date, selectedService.duration]);
 
   async function submitBooking(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -103,7 +105,11 @@ export function BookingForm() {
       const data = (await response.json()) as { message?: string };
 
       if (!response.ok) {
-        throw new Error(data.message ?? "La réservation a échoué.");
+        throw new Error(
+          response.status === 409
+            ? "Ce créneau vient d'être réservé, choisis un autre horaire."
+            : data.message ?? "La réservation a échoué.",
+        );
       }
 
       setStatus({
