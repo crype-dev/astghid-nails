@@ -306,6 +306,7 @@ h3 {
 
 .service-card,
 .promo-grid article,
+.testimonial-card,
 .contact-card,
 .hours-card,
 .booking-panel {
@@ -552,6 +553,43 @@ figcaption span {
   color: rgba(255, 255, 255, 0.7);
 }
 
+.testimonial-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.testimonial-card {
+  display: grid;
+  gap: 18px;
+  min-height: 230px;
+  padding: 26px;
+}
+
+.testimonial-card > span {
+  color: var(--gold);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+}
+
+.testimonial-card p {
+  color: var(--ink);
+  font-size: 1.04rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.testimonial-card div {
+  align-self: end;
+  display: grid;
+  gap: 4px;
+}
+
+.testimonial-card small {
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .about-section {
   align-items: end;
   display: grid;
@@ -636,6 +674,7 @@ iframe {
   .service-grid,
   .gallery-grid,
   .promo-grid,
+  .testimonial-grid,
   .form-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -672,6 +711,7 @@ iframe {
   .service-grid,
   .gallery-grid,
   .promo-grid,
+  .testimonial-grid,
   .form-grid,
   .trust-band {
     grid-template-columns: 1fr;

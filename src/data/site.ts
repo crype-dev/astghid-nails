@@ -20,17 +20,23 @@ export type GalleryItem = {
   image: string;
 };
 
+export type Testimonial = {
+  name: string;
+  service: string;
+  quote: string;
+  rating: 5;
+};
+
 export const salon = {
   name: "Astghid Nails",
-  baseline: "Onglerie premium a Charleroi",
-  phone: "+32 470 00 00 00",
-  email: "contact@astghidnails.be",
-  address: "Rue de la Beauté 12, 6000 Charleroi",
-  instagram: "https://www.instagram.com/",
-  facebook: "https://www.facebook.com/",
-  whatsapp:
-    "https://wa.me/32470000000?text=Bonjour%2C%20je%20souhaite%20prendre%20rendez-vous%20pour%20une%20pose%20d%27ongles.",
-  mapsQuery: "Rue de la Beauté 12, 6000 Charleroi",
+  baseline: "Onglerie premium à Charleroi",
+  phone: "",
+  email: "",
+  address: "Charleroi, Belgique",
+  instagram: "",
+  facebook: "",
+  whatsapp: "",
+  mapsQuery: "Charleroi, Belgique",
 };
 
 export const openingHours = [
@@ -46,11 +52,11 @@ export const openingHours = [
 export const services: Service[] = [
   {
     id: "pose-gel",
-    name: "Pose complete gel",
+    name: "Pose complète gel",
     category: "gel",
     duration: 120,
-    price: "a partir de 65 €",
-    description: "Construction soignee, forme personnalisee et finition brillante.",
+    price: "à partir de 65 €",
+    description: "Construction soignée, forme personnalisée et finition brillante.",
     featured: true,
   },
   {
@@ -58,7 +64,7 @@ export const services: Service[] = [
     name: "Retouche gel",
     category: "retouche",
     duration: 90,
-    price: "a partir de 50 €",
+    price: "à partir de 50 €",
     description: "Remise en forme, remplissage et nouvelle couleur.",
     featured: true,
   },
@@ -68,7 +74,7 @@ export const services: Service[] = [
     category: "gel",
     duration: 90,
     price: "50 €",
-    description: "Renfort fin pour garder un rendu naturel et resistant.",
+    description: "Renfort fin pour garder un rendu naturel et résistant.",
   },
   {
     id: "semi-mains",
@@ -76,7 +82,7 @@ export const services: Service[] = [
     category: "semi",
     duration: 60,
     price: "35 €",
-    description: "Couleur nette, tenue longue duree et cuticules propres.",
+    description: "Couleur nette, tenue longue durée et cuticules propres.",
     featured: true,
   },
   {
@@ -85,11 +91,11 @@ export const services: Service[] = [
     category: "nail-art",
     duration: 30,
     price: "+ 10 €",
-    description: "Finition elegante a ajouter a une pose ou retouche.",
+    description: "Finition élégante à ajouter à une pose ou retouche.",
   },
   {
     id: "nail-art",
-    name: "Nail art personnalise",
+    name: "Nail art personnalisé",
     category: "nail-art",
     duration: 30,
     price: "sur devis",
@@ -97,7 +103,7 @@ export const services: Service[] = [
   },
   {
     id: "depose",
-    name: "Depose",
+    name: "Dépose",
     category: "retouche",
     duration: 45,
     price: "25 €",
@@ -109,25 +115,49 @@ export const services: Service[] = [
     category: "pieds",
     duration: 60,
     price: "38 €",
-    description: "Mise en beaute nette et couleur longue tenue.",
+    description: "Mise en beauté nette et couleur longue tenue.",
   },
 ];
 
 export const promotions: Promotion[] = [
   {
-    title: "Premiere visite",
-    detail: "-10% sur une pose complete gel ou un gainage.",
+    title: "Première visite",
+    detail: "-10% sur une pose complète gel ou un gainage.",
     price: "Offre bienvenue",
   },
   {
     title: "Pack mains + pieds",
-    detail: "Semi-permanent mains et pieds sur le meme rendez-vous.",
+    detail: "Semi-permanent mains et pieds sur le même rendez-vous.",
     price: "68 €",
   },
   {
-    title: "Retouche fidele",
-    detail: "Tarif bloque si la retouche est faite sous 4 semaines.",
+    title: "Retouche fidèle",
+    detail: "Tarif bloqué si la retouche est faite sous 4 semaines.",
     price: "50 €",
+  },
+];
+
+export const testimonials: Testimonial[] = [
+  {
+    name: "Sarah",
+    service: "Pose complète gel",
+    quote:
+      "Pose très propre, forme exactement comme demandé et tenue impeccable.",
+    rating: 5,
+  },
+  {
+    name: "Nora",
+    service: "Semi-permanent mains",
+    quote:
+      "Travail précis, salon calme et résultat naturel. Je recommande.",
+    rating: 5,
+  },
+  {
+    name: "Elena",
+    service: "Retouche gel",
+    quote:
+      "Retouche rapide, couleur parfaite et conseils utiles pour l'entretien.",
+    rating: 5,
   },
 ];
 
@@ -151,7 +181,7 @@ export const gallery: GalleryItem[] = [
       "https://images.unsplash.com/photo-1607779097040-26e80aa78e66?auto=format&fit=crop&w=900&q=85",
   },
   {
-    title: "Details brillants",
+    title: "Détails brillants",
     category: "nail-art",
     image:
       "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=900&q=85",

@@ -1,5 +1,12 @@
 import { BookingForm } from "@/components/booking-form";
-import { gallery, openingHours, promotions, salon, services } from "@/data/site";
+import {
+  gallery,
+  openingHours,
+  promotions,
+  salon,
+  services,
+  testimonials,
+} from "@/data/site";
 import Image from "next/image";
 
 const featuredServices = services.filter((service) => service.featured);
@@ -11,9 +18,37 @@ const categories = [
   { label: "Pieds", value: "pieds" },
 ];
 
+const localBusinessSchema = {
+  "@context": "https://schema.org",
+  "@type": "BeautySalon",
+  name: salon.name,
+  description:
+    "Onglerie à Charleroi spécialisée en pose gel, semi-permanent, retouches et nail art.",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Charleroi",
+    addressCountry: "BE",
+  },
+  areaServed: "Charleroi",
+  openingHours: [
+    "Tu 10:00-18:30",
+    "We 10:00-18:30",
+    "Th 10:00-19:00",
+    "Fr 09:30-18:00",
+    "Sa 09:30-16:00",
+  ],
+  priceRange: "€€",
+};
+
 export default function Home() {
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(localBusinessSchema),
+        }}
+      />
       <header className="site-header">
         <a className="brand" href="#accueil" aria-label="Astghid Nails accueil">
           <span>AN</span>
@@ -100,8 +135,8 @@ export default function Home() {
           <p className="eyebrow">Tarifs</p>
           <h2>Prix lisibles, durée indiquée.</h2>
           <p>
-            Les tarifs sont centralisés dans <code>src/data/site.ts</code> pour
-            rester faciles à modifier.
+            Chaque prestation affiche une durée estimée et un tarif clair pour
+            choisir rapidement le bon rendez-vous.
           </p>
         </div>
 
@@ -124,7 +159,7 @@ export default function Home() {
           <h2>Réservation en ligne réelle.</h2>
           <p>
             Le formulaire vérifie les créneaux disponibles et bloque l&apos;heure
-            choisie dans le stockage local du projet.
+            choisie dès que le rendez-vous est confirmé.
           </p>
         </div>
         <BookingForm />
@@ -132,11 +167,11 @@ export default function Home() {
 
       <section className="section" id="galerie">
         <div className="section-heading">
-          <p className="eyebrow">Galerie</p>
+          <p className="eyebrow">Inspirations</p>
           <h2>Inspirations et finitions.</h2>
           <p>
-            Des visuels réalistes pour montrer l&apos;univers du salon et orienter
-            le choix avant le rendez-vous.
+            Des idées de styles pour préparer votre rendez-vous et préciser la
+            couleur, la forme ou la finition souhaitée.
           </p>
         </div>
 
@@ -158,6 +193,30 @@ export default function Home() {
                 </span>
               </figcaption>
             </figure>
+          ))}
+        </div>
+      </section>
+
+      <section className="section muted" id="avis">
+        <div className="section-heading">
+          <p className="eyebrow">Avis clientes</p>
+          <h2>Des rendez-vous soignés, du premier accueil à la finition.</h2>
+          <p>
+            Quelques retours courts pour donner une idée du niveau d&apos;exigence
+            attendu au salon.
+          </p>
+        </div>
+
+        <div className="testimonial-grid">
+          {testimonials.map((testimonial) => (
+            <article className="testimonial-card" key={testimonial.name}>
+              <span aria-label="Note 5 sur 5">★★★★★</span>
+              <p>“{testimonial.quote}”</p>
+              <div>
+                <strong>{testimonial.name}</strong>
+                <small>{testimonial.service}</small>
+              </div>
+            </article>
           ))}
         </div>
       </section>
@@ -195,14 +254,19 @@ export default function Home() {
           <p className="eyebrow">Contact</p>
           <h2>Passer au salon ou réserver en ligne.</h2>
           <div className="contact-list">
-            <a href={`tel:${salon.phone}`}>{salon.phone}</a>
-            <a href={`mailto:${salon.email}`}>{salon.email}</a>
+            {salon.phone ? <a href={`tel:${salon.phone}`}>{salon.phone}</a> : null}
+            {salon.email ? (
+              <a href={`mailto:${salon.email}`}>{salon.email}</a>
+            ) : null}
             <span>{salon.address}</span>
-            <div className="social-row">
-              <a href={salon.whatsapp}>WhatsApp</a>
-              <a href={salon.instagram}>Instagram</a>
-              <a href={salon.facebook}>Facebook</a>
-            </div>
+            <a href="#rendez-vous">Réserver en ligne</a>
+            {salon.whatsapp || salon.instagram || salon.facebook ? (
+              <div className="social-row">
+                {salon.whatsapp ? <a href={salon.whatsapp}>WhatsApp</a> : null}
+                {salon.instagram ? <a href={salon.instagram}>Instagram</a> : null}
+                {salon.facebook ? <a href={salon.facebook}>Facebook</a> : null}
+              </div>
+            ) : null}
           </div>
         </div>
 

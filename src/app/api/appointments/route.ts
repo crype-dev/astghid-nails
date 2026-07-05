@@ -69,6 +69,10 @@ const businessHours: Record<number, { start: number; end: number } | null> = {
 };
 
 async function getDatabase() {
+  if (process.env.NODE_ENV === "development") {
+    return undefined;
+  }
+
   try {
     const context = await getCloudflareContext({ async: true });
     return (context.env as { DB?: D1DatabaseLike }).DB;
@@ -303,10 +307,7 @@ export async function POST(request: Request) {
       {
         appointment,
         mode,
-        message:
-          mode === "cloudflare-d1"
-            ? "Rendez-vous enregistré en production. Le créneau est maintenant bloqué."
-            : "Rendez-vous enregistré localement. Le créneau est maintenant bloqué.",
+        message: "Rendez-vous enregistré. Le créneau est maintenant bloqué.",
       },
       { status: 201 },
     );
