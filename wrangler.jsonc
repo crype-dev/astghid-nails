@@ -1,0 +1,21 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "astghid-nails",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-07-05",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "astghid-nails-db",
+      "database_id": "c553cfa2-b46f-48e1-8f4f-300c78a5a3bd"
+    }
+  ]
+}

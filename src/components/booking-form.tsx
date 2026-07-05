@@ -4,7 +4,7 @@ import { FormEvent, useEffect, useMemo, useState } from "react";
 import { services } from "@/data/site";
 
 type SlotsResponse = {
-  mode: "local-json";
+  mode: "local-json" | "cloudflare-d1";
   configuredCalendar: boolean;
   slots: string[];
   booked: string[];
@@ -21,6 +21,7 @@ export function BookingForm() {
   const [serviceId, setServiceId] = useState(services[0].id);
   const [date, setDate] = useState(today);
   const [slots, setSlots] = useState<string[]>([]);
+  const [storageMode, setStorageMode] = useState<SlotsResponse["mode"]>("local-json");
   const [slot, setSlot] = useState("");
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -53,6 +54,7 @@ export function BookingForm() {
 
         if (!ignore) {
           setSlots(data.slots);
+          setStorageMode(data.mode);
           setSlot(data.slots[0] ?? "");
         }
       } catch {
@@ -227,9 +229,10 @@ export function BookingForm() {
       </button>
 
       <p className="booking-note">
-        Mode local actif : les rendez-vous sont enregistrés dans
-        <code> data/appointments.json</code>. Aucune confirmation fictive n&apos;est
-        affichée.
+        {storageMode === "cloudflare-d1"
+          ? "Mode production actif : les rendez-vous sont enregistrés dans Cloudflare D1."
+          : "Mode local actif : les rendez-vous sont enregistrés dans data/appointments.json."}{" "}
+        Aucune confirmation fictive n&apos;est affichée.
       </p>
 
       {status.message ? (

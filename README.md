@@ -1,7 +1,8 @@
 # Astghid Nails
 
 Site Next.js complet pour un salon de nails : prestations, tarifs, promotions,
-galerie, contact et réservation en ligne.
+galerie, contact et réservation en ligne. Le projet tourne en localhost et se
+déploie sur Cloudflare Workers via OpenNext.
 
 ## Lancer en local
 
@@ -20,10 +21,16 @@ http://localhost:3000
 
 Le site fonctionne directement sans API externe.
 
-Les rendez-vous sont enregistrés dans :
+En local Next.js, les rendez-vous sont enregistrés dans :
 
 ```bash
 data/appointments.json
+```
+
+En production Cloudflare, les rendez-vous sont enregistrés dans D1 :
+
+```bash
+astghid-nails-db
 ```
 
 La route serveur utilisée par le formulaire est :
@@ -34,7 +41,34 @@ POST /api/appointments
 ```
 
 Le système vérifie les créneaux disponibles et bloque les doublons sur la même
-date et la même heure.
+date et la même heure. En production, la table D1 impose aussi une contrainte
+unique `(date, time)`.
+
+## Cloudflare
+
+Appliquer les migrations D1 en local :
+
+```bash
+npm run db:migrate:local
+```
+
+Appliquer les migrations D1 en production :
+
+```bash
+npm run db:migrate:prod
+```
+
+Prévisualiser avec le runtime Cloudflare Workers :
+
+```bash
+npm run preview
+```
+
+Déployer en production :
+
+```bash
+npm run deploy
+```
 
 ## Variables d'environnement
 
@@ -73,4 +107,6 @@ src/data/site.ts
 npm run dev
 npm run build
 npm run lint
+npm run preview
+npm run deploy
 ```
