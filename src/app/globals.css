@@ -644,6 +644,237 @@ iframe {
   width: 100%;
 }
 
+.admin-login-page,
+.admin-page {
+  background: #fffaf8;
+  min-height: 100vh;
+}
+
+.admin-login-page {
+  display: grid;
+  padding: clamp(24px, 6vw, 72px);
+  place-items: center;
+}
+
+.admin-login-card,
+.admin-panel,
+.admin-table-wrap {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(36, 27, 31, 0.07);
+}
+
+.admin-login-card {
+  max-width: 480px;
+  padding: clamp(24px, 5vw, 42px);
+  width: 100%;
+}
+
+.admin-login-card h1,
+.admin-sidebar h1 {
+  font-size: 2rem;
+  line-height: 1.05;
+  margin-bottom: 14px;
+}
+
+.admin-login-card p:not(.eyebrow),
+.admin-section-header p,
+.admin-empty {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.admin-back-link {
+  color: var(--rose-deep);
+  display: inline-flex;
+  font-weight: 800;
+  margin-bottom: 22px;
+}
+
+.admin-form {
+  margin-top: 24px;
+}
+
+.admin-page {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+}
+
+.admin-sidebar {
+  align-content: start;
+  background: var(--ink);
+  color: #fff;
+  display: grid;
+  gap: 24px;
+  min-height: 100vh;
+  padding: 28px;
+}
+
+.admin-sidebar .eyebrow {
+  color: #f0bcc9;
+}
+
+.admin-nav {
+  display: grid;
+  gap: 10px;
+  justify-content: stretch;
+}
+
+.admin-nav a,
+.admin-logout {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.74);
+  font-weight: 800;
+  padding: 12px 14px;
+}
+
+.admin-nav a.active,
+.admin-nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.admin-logout {
+  background: transparent;
+  cursor: pointer;
+  margin-top: auto;
+  text-align: left;
+}
+
+.admin-content {
+  padding: clamp(22px, 5vw, 54px);
+}
+
+.admin-stack {
+  display: grid;
+  gap: 20px;
+}
+
+.admin-section-header {
+  align-items: end;
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+}
+
+.admin-section-header h2 {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  margin-bottom: 8px;
+}
+
+.admin-section-header label {
+  min-width: 210px;
+}
+
+.admin-table-wrap,
+.admin-panel {
+  overflow: auto;
+  padding: 18px;
+}
+
+.admin-table {
+  border-collapse: collapse;
+  min-width: 900px;
+  width: 100%;
+}
+
+.admin-table th,
+.admin-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.admin-table th {
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.admin-table td {
+  color: var(--ink);
+}
+
+.admin-table small,
+.admin-table a {
+  color: var(--muted);
+  display: block;
+  margin-top: 5px;
+}
+
+.admin-pill {
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 7px 10px;
+}
+
+.admin-pill.confirmed {
+  background: #edf8f1;
+  color: #28613a;
+}
+
+.admin-pill.cancelled {
+  background: #fff0ef;
+  color: #9a2f2a;
+}
+
+.admin-danger,
+.admin-secondary {
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 800;
+  min-height: 38px;
+  padding: 0 12px;
+}
+
+.admin-danger {
+  background: #fff0ef;
+  color: #9a2f2a;
+}
+
+.admin-secondary {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.admin-block-form {
+  align-items: end;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(160px, 0.4fr) 1fr auto;
+}
+
+.blocked-list {
+  display: grid;
+  gap: 12px;
+}
+
+.blocked-list article {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  padding-bottom: 12px;
+}
+
+.blocked-list article:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.blocked-list span {
+  color: var(--muted);
+  display: block;
+  margin-top: 4px;
+}
+
 @media (max-width: 980px) {
   .site-header,
   .hero,
@@ -681,6 +912,24 @@ iframe {
 
   .trust-band {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .admin-page {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    min-height: auto;
+  }
+
+  .admin-block-form,
+  .admin-section-header {
+    align-items: stretch;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-section-header {
+    display: grid;
   }
 }
 
