@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/:path*",
+        source: "/",
         has: [
           {
             type: "host",
@@ -15,6 +15,17 @@ const nextConfig: NextConfig = {
           },
         ],
         destination: "https://astghidnails.com",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [
+          {
+            type: "host",
+            value: "www.astghidnails.com",
+          },
+        ],
+        destination: "https://astghidnails.com/:path*",
         permanent: true,
       },
     ];
