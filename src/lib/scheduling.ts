@@ -15,6 +15,7 @@ export type Appointment = {
   email: string;
   message: string;
   status: "confirmed" | "cancelled";
+  cancelledAt: string | null;
   createdAt: string;
 };
 
@@ -55,6 +56,7 @@ type AppointmentRow = {
   email: string;
   message: string;
   status?: "confirmed" | "cancelled";
+  cancelled_at?: string | null;
   created_at: string;
 };
 
@@ -79,6 +81,10 @@ type D1Statement = {
 
 export type D1DatabaseLike = {
   prepare(query: string): D1Statement;
+};
+
+type LocalAppointment = Appointment & {
+  cancelTokenHash?: string | null;
 };
 
 export const slotPattern = /^([01]\d|2[0-3]):[0-5]\d$/;
@@ -126,7 +132,27 @@ function toAppointment(row: AppointmentRow): Appointment {
     email: row.email,
     message: row.message,
     status: row.status ?? "confirmed",
+    cancelledAt: row.cancelled_at ?? null,
     createdAt: row.created_at,
+  };
+}
+
+function toPublicAppointment(appointment: LocalAppointment): Appointment {
+  return {
+    id: appointment.id,
+    serviceId: appointment.serviceId,
+    serviceName: appointment.serviceName,
+    serviceDurationMinutes: appointment.serviceDurationMinutes,
+    servicePrice: appointment.servicePrice,
+    date: appointment.date,
+    time: appointment.time,
+    name: appointment.name,
+    phone: appointment.phone,
+    email: appointment.email,
+    message: appointment.message,
+    status: appointment.status,
+    cancelledAt: appointment.cancelledAt,
+    createdAt: appointment.createdAt,
   };
 }
 
@@ -140,7 +166,7 @@ function toBlockedSlot(row: BlockedSlotRow): BlockedSlot {
   };
 }
 
-async function readLocalAppointments(): Promise<Appointment[]> {
+async function readLocalAppointments(): Promise<LocalAppointment[]> {
   try {
     const [{ readFile }, path] = await Promise.all([
       import("node:fs/promises"),
@@ -148,7 +174,7 @@ async function readLocalAppointments(): Promise<Appointment[]> {
     ]);
     const appointmentsFile = path.join(process.cwd(), "data", "appointments.json");
     const file = await readFile(appointmentsFile, "utf8");
-    const rows = JSON.parse(file) as Partial<Appointment>[];
+    const rows = JSON.parse(file) as Partial<LocalAppointment>[];
 
     return rows.map((row) => ({
       id: row.id ?? crypto.randomUUID(),
@@ -163,6 +189,8 @@ async function readLocalAppointments(): Promise<Appointment[]> {
       email: row.email ?? "",
       message: row.message ?? "",
       status: row.status ?? "confirmed",
+      cancelledAt: row.cancelledAt ?? null,
+      cancelTokenHash: row.cancelTokenHash ?? null,
       createdAt: row.createdAt ?? new Date().toISOString(),
     }));
   } catch {
@@ -170,7 +198,7 @@ async function readLocalAppointments(): Promise<Appointment[]> {
   }
 }
 
-async function writeLocalAppointments(appointments: Appointment[]) {
+async function writeLocalAppointments(appointments: LocalAppointment[]) {
   const [{ mkdir, writeFile }, path] = await Promise.all([
     import("node:fs/promises"),
     import("node:path"),
@@ -180,6 +208,21 @@ async function writeLocalAppointments(appointments: Appointment[]) {
 
   await mkdir(dataDir, { recursive: true });
   await writeFile(appointmentsFile, JSON.stringify(appointments, null, 2));
+}
+
+function generateCancelToken() {
+  const bytes = new Uint8Array(32);
+  crypto.getRandomValues(bytes);
+  return Buffer.from(bytes).toString("base64url");
+}
+
+async function hashCancelToken(token: string) {
+  const digest = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(token),
+  );
+
+  return Buffer.from(digest).toString("hex");
 }
 
 export async function listAppointments(options: {
@@ -206,7 +249,7 @@ export async function listAppointments(options: {
     const rows = await db
       .prepare(
         `SELECT id, service_id, service_name, service_duration_minutes, service_price,
-          date, time, name, phone, email, message, status, created_at
+          date, time, name, phone, email, message, status, cancelled_at, created_at
          FROM appointments
          ${where}
          ORDER BY date ASC, time ASC`,
@@ -225,6 +268,7 @@ export async function listAppointments(options: {
   return {
     mode: "local-json" as const,
     appointments: appointments
+      .map(toPublicAppointment)
       .filter((appointment) => (options.date ? appointment.date === options.date : true))
       .filter((appointment) => (includeAll ? true : appointment.status === "confirmed"))
       .sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`)),
@@ -296,15 +340,19 @@ export async function updateAppointmentStatus(
 
   if (!db) {
     const appointments = await readLocalAppointments();
+    const cancelledAt = status === "cancelled" ? new Date().toISOString() : null;
     const updated = appointments.map((appointment) =>
-      appointment.id === id ? { ...appointment, status } : appointment,
+      appointment.id === id ? { ...appointment, status, cancelledAt } : appointment,
     );
 
     await writeLocalAppointments(updated);
     return { success: true };
   }
 
-  await db.prepare("UPDATE appointments SET status = ? WHERE id = ?").bind(status, id).run();
+  await db
+    .prepare("UPDATE appointments SET status = ?, cancelled_at = ? WHERE id = ?")
+    .bind(status, status === "cancelled" ? new Date().toISOString() : null, id)
+    .run();
   return { success: true };
 }
 
@@ -437,14 +485,17 @@ export async function createAppointment(payload: AppointmentPayload) {
   }
 
   const db = await getDatabase();
+  const cancelToken = generateCancelToken();
+  const cancelTokenHash = await hashCancelToken(cancelToken);
 
   if (db) {
     await db
       .prepare(
         `INSERT INTO appointments (
           id, service_id, service_name, service_duration_minutes, service_price,
-          date, time, name, phone, email, message, status, created_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          date, time, name, phone, email, message, status, cancel_token_hash,
+          cancelled_at, created_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       )
       .bind(
         validation.appointment.id,
@@ -459,17 +510,107 @@ export async function createAppointment(payload: AppointmentPayload) {
         validation.appointment.email,
         validation.appointment.message,
         validation.appointment.status,
+        cancelTokenHash,
+        validation.appointment.cancelledAt,
         validation.appointment.createdAt,
       )
       .run();
 
-    return { appointment: validation.appointment, mode: "cloudflare-d1" as const };
+    return {
+      appointment: validation.appointment,
+      cancelToken,
+      mode: "cloudflare-d1" as const,
+    };
   }
 
   const appointments = await readLocalAppointments();
-  await writeLocalAppointments([...appointments, validation.appointment]);
+  await writeLocalAppointments([
+    ...appointments,
+    { ...validation.appointment, cancelTokenHash },
+  ]);
 
-  return { appointment: validation.appointment, mode: "local-json" as const };
+  return { appointment: validation.appointment, cancelToken, mode: "local-json" as const };
+}
+
+export async function getAppointmentByCancelToken(token?: string) {
+  if (!token || token.length < 20) {
+    return { error: "Lien d'annulation invalide." };
+  }
+
+  const cancelTokenHash = await hashCancelToken(token);
+  const db = await getDatabase();
+
+  if (db) {
+    const rows = await db
+      .prepare(
+        `SELECT id, service_id, service_name, service_duration_minutes, service_price,
+          date, time, name, phone, email, message, status, cancelled_at, created_at
+         FROM appointments
+         WHERE cancel_token_hash = ?
+         LIMIT 1`,
+      )
+      .bind(cancelTokenHash)
+      .all<AppointmentRow>();
+    const appointment = rows.results?.[0];
+
+    return appointment
+      ? { appointment: toAppointment(appointment) }
+      : { error: "Lien d'annulation invalide." };
+  }
+
+  const appointment = (await readLocalAppointments()).find(
+    (item) => item.cancelTokenHash === cancelTokenHash,
+  );
+
+  if (!appointment) {
+    return { error: "Lien d'annulation invalide." };
+  }
+
+  return { appointment: toPublicAppointment(appointment) };
+}
+
+export async function cancelAppointmentByToken(token?: string) {
+  const result = await getAppointmentByCancelToken(token);
+
+  if ("error" in result) {
+    return result;
+  }
+
+  if (result.appointment.status === "cancelled") {
+    return { error: "Ce rendez-vous est déjà annulé.", appointment: result.appointment };
+  }
+
+  const cancelledAt = new Date().toISOString();
+  const cancelTokenHash = await hashCancelToken(token ?? "");
+  const db = await getDatabase();
+
+  if (db) {
+    await db
+      .prepare(
+        `UPDATE appointments
+         SET status = 'cancelled', cancelled_at = ?
+         WHERE cancel_token_hash = ? AND status != 'cancelled'`,
+      )
+      .bind(cancelledAt, cancelTokenHash)
+      .run();
+  } else {
+    const appointments = await readLocalAppointments();
+    await writeLocalAppointments(
+      appointments.map((appointment) =>
+        appointment.cancelTokenHash === cancelTokenHash
+          ? { ...appointment, status: "cancelled", cancelledAt }
+          : appointment,
+      ),
+    );
+  }
+
+  return {
+    appointment: {
+      ...result.appointment,
+      status: "cancelled" as const,
+      cancelledAt,
+    },
+  };
 }
 
 function validateAppointmentPayload(payload: AppointmentPayload) {
@@ -532,6 +673,7 @@ function validateAppointmentPayload(payload: AppointmentPayload) {
       email: payload.email.trim(),
       message: payload.message?.trim() ?? "",
       status: "confirmed" as const,
+      cancelledAt: null,
       createdAt: new Date().toISOString(),
     },
   };

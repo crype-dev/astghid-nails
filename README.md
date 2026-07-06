@@ -111,6 +111,14 @@ RESEND_OWNER_EMAIL=astghid86@gmail.com
 Remplacer `re_xxxxxxxxx` par la vraie clé API Resend, puis ajouter les mêmes
 variables en secrets Cloudflare avant de redéployer.
 
+Les emails de confirmation contiennent un lien sécurisé d'annulation :
+
+```bash
+https://astghidnails.com/cancel/[token]
+```
+
+Le token brut n'est jamais stocké en base. D1 stocke uniquement son hash.
+
 ## Modifier le contenu
 
 Les prestations, tarifs, promotions, galerie, coordonnées et horaires sont dans :

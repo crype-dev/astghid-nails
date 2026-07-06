@@ -64,7 +64,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: result.error }, { status: 400 });
     }
 
-    const emailResult = await sendAppointmentConfirmation(result.appointment);
+    const cancelToken = "cancelToken" in result ? result.cancelToken : "";
+    const emailResult = cancelToken
+      ? await sendAppointmentConfirmation(result.appointment, cancelToken)
+      : { status: "disabled" as const };
     const message =
       emailResult.status === "sent"
         ? "Rendez-vous enregistré. Un email de confirmation vient d'être envoyé."
