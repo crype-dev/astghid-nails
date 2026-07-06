@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAvailableSlots, datePattern } from "@/lib/scheduling";
+import { isWithinAppointmentWindow } from "@/lib/appointment-dates";
 
 export const runtime = "nodejs";
 
@@ -11,6 +12,15 @@ export async function GET(request: Request) {
 
     if (!datePattern.test(date)) {
       return NextResponse.json({ message: "Date invalide." }, { status: 400 });
+    }
+
+    if (!isWithinAppointmentWindow(date)) {
+      return NextResponse.json(
+        {
+          message: "Les rendez-vous sont ouverts jusqu'à deux mois à l'avance.",
+        },
+        { status: 400 },
+      );
     }
 
     if (!Number.isFinite(serviceDuration) || serviceDuration <= 0) {

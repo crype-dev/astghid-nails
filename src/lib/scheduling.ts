@@ -1,5 +1,6 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { services } from "@/data/site";
+import { isWithinAppointmentWindow } from "@/lib/appointment-dates";
 
 export type Appointment = {
   id: string;
@@ -373,7 +374,12 @@ export function appointmentsOverlap(
 }
 
 export async function getAvailableSlots(date: string, serviceDuration: number) {
-  if (!datePattern.test(date) || serviceDuration <= 0 || isPastDate(date)) {
+  if (
+    !datePattern.test(date) ||
+    serviceDuration <= 0 ||
+    isPastDate(date) ||
+    !isWithinAppointmentWindow(date)
+  ) {
     return [];
   }
 
@@ -479,6 +485,12 @@ function validateAppointmentPayload(payload: AppointmentPayload) {
 
   if (isPastDate(payload.date)) {
     return { error: "La date choisie est déjà passée." };
+  }
+
+  if (!isWithinAppointmentWindow(payload.date)) {
+    return {
+      error: "Les rendez-vous sont ouverts jusqu'à deux mois à l'avance.",
+    };
   }
 
   if (!payload.time || !slotPattern.test(payload.time)) {

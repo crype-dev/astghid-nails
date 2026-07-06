@@ -468,6 +468,45 @@ textarea:focus {
   padding: clamp(14px, 3vw, 22px);
 }
 
+.appointment-calendar .calendar-weekday {
+  border-radius: 999px;
+}
+
+.appointment-calendar .calendar-weekday:nth-child(1) {
+  background: #f7dfdf;
+  color: #8f4b55;
+}
+
+.appointment-calendar .calendar-weekday:nth-child(2) {
+  background: #f4e6ce;
+  color: #8a6634;
+}
+
+.appointment-calendar .calendar-weekday:nth-child(3) {
+  background: #e4eddc;
+  color: #5d7444;
+}
+
+.appointment-calendar .calendar-weekday:nth-child(4) {
+  background: #e7e1f3;
+  color: #67548b;
+}
+
+.appointment-calendar .calendar-weekday:nth-child(5) {
+  background: #f6dfeb;
+  color: #914f73;
+}
+
+.appointment-calendar .calendar-weekday:nth-child(6) {
+  background: #ddebf2;
+  color: #4f6f83;
+}
+
+.appointment-calendar .calendar-weekday:nth-child(7) {
+  background: #f2e4d7;
+  color: #805f42;
+}
+
 .appointment-slots {
   background: var(--cream);
   border-left: 1px solid var(--line);

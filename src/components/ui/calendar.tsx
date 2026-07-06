@@ -30,7 +30,8 @@ function Calendar({
       buttonVariants({ variant: "ghost" }),
       "size-9 text-muted-foreground/80 hover:text-foreground p-0",
     ),
-    weekday: "size-9 p-0 text-xs font-medium text-muted-foreground/80",
+    weekday:
+      "calendar-weekday size-9 p-0 text-xs font-semibold text-muted-foreground/90",
     day_button:
       "relative flex size-9 items-center justify-center whitespace-nowrap rounded-lg p-0 text-foreground outline-offset-2 focus:outline-none focus-visible:z-10 hover:bg-accent group-data-[selected]:bg-primary hover:text-foreground group-data-[selected]:text-primary-foreground group-data-[disabled]:pointer-events-none group-data-[disabled]:text-foreground/30 group-data-[disabled]:line-through group-data-[outside]:text-foreground/30 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70",
     day: "group size-9 px-0 text-sm",

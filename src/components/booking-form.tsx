@@ -5,6 +5,15 @@ import { services } from "@/data/site";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { fr } from "react-day-picker/locale";
+import {
+  dateKeyToNoonDate,
+  getInitialAppointmentDateKey,
+  getMaxAppointmentDateKey,
+  getTodayKey,
+  isClosedDay,
+  toDateKey,
+} from "@/lib/appointment-dates";
 
 type SlotsResponse = {
   slots: string[];
@@ -15,15 +24,9 @@ type BookingStatus =
   | { type: "success"; message: string }
   | { type: "error"; message: string };
 
-const today = new Date().toISOString().slice(0, 10);
-const todayDate = new Date(`${today}T12:00:00`);
-
-function toDateKey(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
+const today = getTodayKey();
+const todayDate = dateKeyToNoonDate(today);
+const maxAppointmentDate = dateKeyToNoonDate(getMaxAppointmentDateKey());
 
 function formatSelectedDate(date: string) {
   return new Intl.DateTimeFormat("fr-BE", {
@@ -35,7 +38,7 @@ function formatSelectedDate(date: string) {
 
 export function BookingForm() {
   const [serviceId, setServiceId] = useState(services[0].id);
-  const [date, setDate] = useState(today);
+  const [date, setDate] = useState(getInitialAppointmentDateKey());
   const [slots, setSlots] = useState<string[]>([]);
   const [slot, setSlot] = useState("");
   const [loadingSlots, setLoadingSlots] = useState(false);
@@ -189,8 +192,11 @@ export function BookingForm() {
             className="p-2"
             disabled={[
               { before: todayDate },
-              (day) => day.getDay() === 0 || day.getDay() === 1,
+              { after: maxAppointmentDate },
+              isClosedDay,
             ]}
+            endMonth={maxAppointmentDate}
+            locale={fr}
             mode="single"
             onSelect={(newDate) => {
               if (newDate) {
@@ -199,6 +205,8 @@ export function BookingForm() {
               }
             }}
             selected={selectedDate}
+            startMonth={todayDate}
+            weekStartsOn={1}
           />
         </div>
 
