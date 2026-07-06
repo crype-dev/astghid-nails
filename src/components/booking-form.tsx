@@ -107,10 +107,11 @@ export function BookingForm() {
 
   async function submitBooking(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const form = event.currentTarget;
     setSubmitting(true);
     setStatus({ type: "idle", message: "" });
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(form);
     const payload = {
       serviceId,
       date,
@@ -145,7 +146,7 @@ export function BookingForm() {
       });
       setSlots((current) => current.filter((currentSlot) => currentSlot !== slot));
       setSlot("");
-      event.currentTarget.reset();
+      form.reset();
     } catch (error) {
       setStatus({
         type: "error",
