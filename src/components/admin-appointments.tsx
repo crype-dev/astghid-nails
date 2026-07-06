@@ -25,7 +25,7 @@ const today = new Date().toISOString().slice(0, 10);
 
 export function AdminAppointments() {
   const router = useRouter();
-  const [date, setDate] = useState(today);
+  const [date, setDate] = useState("");
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("");
@@ -36,10 +36,11 @@ export function AdminAppointments() {
   );
 
   const fetchAppointments = useCallback(async (selectedDate: string) => {
-    const params = new URLSearchParams({
-      date: selectedDate,
-      includeAll: "true",
-    });
+    const params = new URLSearchParams({ includeAll: "true" });
+    if (selectedDate) {
+      params.set("date", selectedDate);
+    }
+
     const response = await fetch(`/api/appointments?${params.toString()}`, {
       cache: "no-store",
     });
@@ -55,7 +56,9 @@ export function AdminAppointments() {
       throw new Error("Impossible de charger les rendez-vous.");
     }
 
-    return data.appointments;
+    return selectedDate
+      ? data.appointments
+      : data.appointments.filter((appointment) => appointment.date >= today);
   }, [router]);
 
   async function updateStatus(id: string, nextStatus: Appointment["status"]) {
@@ -118,7 +121,7 @@ export function AdminAppointments() {
       <header className="admin-section-header">
         <div>
           <p className="eyebrow">Rendez-vous</p>
-          <h2>Planning du jour</h2>
+          <h2>{date ? "Planning du jour" : "Prochains rendez-vous"}</h2>
           <p>
             {confirmedCount} rendez-vous confirmé{confirmedCount > 1 ? "s" : ""}
           </p>
@@ -135,6 +138,19 @@ export function AdminAppointments() {
             }}
           />
         </label>
+        {date ? (
+          <button
+            className="admin-secondary"
+            onClick={() => {
+              setLoading(true);
+              setStatus("");
+              setDate("");
+            }}
+            type="button"
+          >
+            Voir tout
+          </button>
+        ) : null}
       </header>
 
       {status ? <p className="status-message error">{status}</p> : null}
@@ -149,6 +165,7 @@ export function AdminAppointments() {
             <thead>
               <tr>
                 <th>Heure</th>
+                <th>Date</th>
                 <th>Cliente</th>
                 <th>Prestation</th>
                 <th>Contact</th>
@@ -163,6 +180,7 @@ export function AdminAppointments() {
                     <strong>{appointment.time}</strong>
                     <small>{appointment.serviceDurationMinutes} min</small>
                   </td>
+                  <td>{appointment.date}</td>
                   <td>
                     <strong>{appointment.name}</strong>
                     {appointment.message ? <small>{appointment.message}</small> : null}

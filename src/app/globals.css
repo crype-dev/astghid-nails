@@ -16,6 +16,18 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted);
+  --color-border: var(--line);
+  --color-input: var(--line);
+  --color-ring: var(--rose);
+  --color-primary: var(--ink);
+  --color-primary-foreground: #ffffff;
+  --color-secondary: var(--cream);
+  --color-secondary-foreground: var(--ink);
+  --color-accent: var(--nude);
+  --color-accent-foreground: var(--ink);
+  --color-destructive: #9a2f2a;
+  --color-destructive-foreground: #ffffff;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -434,6 +446,72 @@ textarea:focus {
   display: block;
   font-size: 1.35rem;
   margin: 6px 0;
+}
+
+.booking-service-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.appointment-picker {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(220px, 0.55fr);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.appointment-calendar {
+  background: #fff;
+  display: grid;
+  justify-content: center;
+  padding: clamp(14px, 3vw, 22px);
+}
+
+.appointment-slots {
+  background: var(--cream);
+  border-left: 1px solid var(--line);
+  min-height: 330px;
+  position: relative;
+}
+
+.appointment-slots-heading {
+  display: grid;
+  gap: 4px;
+  padding: 18px 18px 10px;
+}
+
+.appointment-slots-heading span {
+  color: var(--rose-deep);
+  font-size: 0.78rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.appointment-slots-heading strong {
+  font-size: 1.02rem;
+}
+
+.appointment-slots-scroll {
+  height: 252px;
+}
+
+.appointment-slots-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 8px 18px 18px;
+}
+
+.appointment-slot-button {
+  width: 100%;
+}
+
+.appointment-slot-empty {
+  color: var(--muted);
+  grid-column: 1 / -1;
+  line-height: 1.55;
+  margin: 0;
 }
 
 .booking-note {
@@ -906,7 +984,8 @@ iframe {
   .gallery-grid,
   .promo-grid,
   .testimonial-grid,
-  .form-grid {
+  .form-grid,
+  .appointment-picker {
     grid-template-columns: 1fr 1fr;
   }
 
@@ -930,6 +1009,15 @@ iframe {
 
   .admin-section-header {
     display: grid;
+  }
+
+  .appointment-picker {
+    grid-template-columns: 1fr;
+  }
+
+  .appointment-slots {
+    border-left: 0;
+    border-top: 1px solid var(--line);
   }
 }
 
@@ -962,6 +1050,7 @@ iframe {
   .promo-grid,
   .testimonial-grid,
   .form-grid,
+  .appointment-slots-grid,
   .trust-band {
     grid-template-columns: 1fr;
   }

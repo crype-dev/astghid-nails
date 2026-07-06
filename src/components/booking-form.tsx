@@ -2,6 +2,9 @@
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { services } from "@/data/site";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 type SlotsResponse = {
   slots: string[];
@@ -13,6 +16,22 @@ type BookingStatus =
   | { type: "error"; message: string };
 
 const today = new Date().toISOString().slice(0, 10);
+const todayDate = new Date(`${today}T12:00:00`);
+
+function toDateKey(date: Date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatSelectedDate(date: string) {
+  return new Intl.DateTimeFormat("fr-BE", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  }).format(new Date(`${date}T12:00:00`));
+}
 
 export function BookingForm() {
   const [serviceId, setServiceId] = useState(services[0].id);
@@ -30,6 +49,7 @@ export function BookingForm() {
     () => services.find((service) => service.id === serviceId) ?? services[0],
     [serviceId],
   );
+  const selectedDate = useMemo(() => new Date(`${date}T12:00:00`), [date]);
 
   useEffect(() => {
     let ignore = false;
@@ -54,7 +74,9 @@ export function BookingForm() {
 
         if (!ignore) {
           setSlots(data.slots);
-          setSlot(data.slots[0] ?? "");
+          setSlot((currentSlot) =>
+            data.slots.includes(currentSlot) ? currentSlot : "",
+          );
         }
       } catch {
         if (!ignore) {
@@ -136,12 +158,15 @@ export function BookingForm() {
 
   return (
     <form className="booking-panel" onSubmit={submitBooking}>
-      <div className="form-grid">
+      <div className="form-grid booking-service-grid">
         <label>
           Prestation
           <select
             value={serviceId}
-            onChange={(event) => setServiceId(event.target.value)}
+            onChange={(event) => {
+              setServiceId(event.target.value);
+              setSlot("");
+            }}
           >
             {services.map((service) => (
               <option key={service.id} value={service.id}>
@@ -150,45 +175,63 @@ export function BookingForm() {
             ))}
           </select>
         </label>
-
-        <label>
-          Date
-          <input
-            min={today}
-            type="date"
-            value={date}
-            onChange={(event) => setDate(event.target.value)}
-            required
-          />
-        </label>
-
-        <label>
-          Heure disponible
-          <select
-            value={slot}
-            onChange={(event) => setSlot(event.target.value)}
-            disabled={loadingSlots || slots.length === 0}
-            required
-          >
-            {loadingSlots ? (
-              <option>Chargement...</option>
-            ) : slots.length > 0 ? (
-              slots.map((availableSlot) => (
-                <option key={availableSlot} value={availableSlot}>
-                  {availableSlot}
-                </option>
-              ))
-            ) : (
-              <option>Aucun créneau disponible</option>
-            )}
-          </select>
-        </label>
       </div>
 
       <div className="booking-summary">
         <span>{selectedService.duration} min</span>
         <strong>{selectedService.price}</strong>
         <p>{selectedService.description}</p>
+      </div>
+
+      <div className="appointment-picker">
+        <div className="appointment-calendar">
+          <Calendar
+            className="p-2"
+            disabled={[
+              { before: todayDate },
+              (day) => day.getDay() === 0 || day.getDay() === 1,
+            ]}
+            mode="single"
+            onSelect={(newDate) => {
+              if (newDate) {
+                setDate(toDateKey(newDate));
+                setSlot("");
+              }
+            }}
+            selected={selectedDate}
+          />
+        </div>
+
+        <div className="appointment-slots">
+          <div className="appointment-slots-heading">
+            <span>Créneaux disponibles</span>
+            <strong>{formatSelectedDate(date)}</strong>
+          </div>
+          <ScrollArea className="appointment-slots-scroll">
+            <div className="appointment-slots-grid">
+              {loadingSlots ? (
+                <p className="appointment-slot-empty">Chargement...</p>
+              ) : slots.length > 0 ? (
+                slots.map((availableSlot) => (
+                  <Button
+                    className="appointment-slot-button"
+                    key={availableSlot}
+                    onClick={() => setSlot(availableSlot)}
+                    size="sm"
+                    type="button"
+                    variant={slot === availableSlot ? "default" : "outline"}
+                  >
+                    {availableSlot}
+                  </Button>
+                ))
+              ) : (
+                <p className="appointment-slot-empty">
+                  Aucun créneau disponible pour cette date.
+                </p>
+              )}
+            </div>
+          </ScrollArea>
+        </div>
       </div>
 
       <div className="form-grid">
