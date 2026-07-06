@@ -67,11 +67,14 @@ export async function POST(request: Request) {
     const cancelToken = "cancelToken" in result ? result.cancelToken : "";
     const emailResult = cancelToken
       ? await sendAppointmentConfirmation(result.appointment, cancelToken)
-      : { status: "disabled" as const };
+      : {
+          customer: { status: "disabled" as const },
+          owner: { status: "disabled" as const },
+        };
     const message =
-      emailResult.status === "sent"
+      emailResult.customer.status === "sent"
         ? "Rendez-vous enregistré. Un email de confirmation vient d'être envoyé."
-        : emailResult.status === "failed"
+        : emailResult.customer.status === "failed"
           ? "Rendez-vous enregistré. L'email de confirmation n'a pas pu être envoyé."
           : "Rendez-vous enregistré. Le créneau est maintenant bloqué.";
 
@@ -79,7 +82,8 @@ export async function POST(request: Request) {
       {
         appointment: result.appointment,
         mode: "mode" in result ? result.mode : undefined,
-        emailStatus: emailResult.status,
+        emailStatus: emailResult.customer.status,
+        ownerEmailStatus: emailResult.owner.status,
         message,
       },
       { status: 201 },

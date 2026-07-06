@@ -659,6 +659,15 @@ function validateAppointmentPayload(payload: AppointmentPayload) {
     return { error: "Email invalide." };
   }
 
+  const emailDomain = payload.email.trim().split("@")[1]?.toLowerCase() ?? "";
+  if (
+    emailDomain.endsWith(".local") ||
+    emailDomain.endsWith(".test") ||
+    emailDomain.endsWith(".invalid")
+  ) {
+    return { error: "Merci d'utiliser une adresse email réelle." };
+  }
+
   return {
     appointment: {
       id: crypto.randomUUID(),

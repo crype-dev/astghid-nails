@@ -111,6 +111,11 @@ RESEND_OWNER_EMAIL=astghid86@gmail.com
 Remplacer `re_xxxxxxxxx` par la vraie clé API Resend, puis ajouter les mêmes
 variables en secrets Cloudflare avant de redéployer.
 
+Important : `RESEND_FROM_EMAIL` doit utiliser un domaine vérifié dans Resend,
+par exemple `reservations@astghidnails.com`. Les adresses de test comme
+`@astghid.local` sont refusées par l'API de réservation afin d'éviter les
+bounces.
+
 Les emails de confirmation contiennent un lien sécurisé d'annulation :
 
 ```bash

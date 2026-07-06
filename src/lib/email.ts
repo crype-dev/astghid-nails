@@ -7,6 +7,11 @@ type EmailResult =
   | { status: "disabled" }
   | { status: "failed"; error: string };
 
+export type AppointmentEmailResult = {
+  customer: EmailResult;
+  owner: EmailResult;
+};
+
 function getResendClient() {
   const apiKey = process.env.RESEND_API_KEY;
 
@@ -102,38 +107,97 @@ function buildConfirmationHtml(appointment: Appointment, cancelUrl: string) {
   `;
 }
 
+function buildOwnerBookingHtml(appointment: Appointment) {
+  return `
+    <div style="font-family:Arial,sans-serif;color:#241b1f;line-height:1.6">
+      <h1 style="font-size:22px;margin:0 0 16px">Nouveau rendez-vous</h1>
+      <p><strong>Cliente :</strong> ${escapeHtml(appointment.name)}</p>
+      <p><strong>Email :</strong> ${escapeHtml(appointment.email)}</p>
+      <p><strong>Téléphone :</strong> ${escapeHtml(appointment.phone)}</p>
+      <p><strong>Prestation :</strong> ${escapeHtml(appointment.serviceName)}</p>
+      <p><strong>Date :</strong> ${formatAppointmentDate(appointment.date)}</p>
+      <p><strong>Heure :</strong> ${appointment.time}</p>
+      <p><strong>Durée :</strong> ${appointment.serviceDurationMinutes} min</p>
+      <p><strong>Prix :</strong> ${escapeHtml(appointment.servicePrice)}</p>
+      ${
+        appointment.message
+          ? `<p><strong>Message :</strong> ${escapeHtml(appointment.message)}</p>`
+          : ""
+      }
+    </div>
+  `;
+}
+
 export async function sendAppointmentConfirmation(
   appointment: Appointment,
   cancelToken: string,
-): Promise<EmailResult> {
+): Promise<AppointmentEmailResult> {
   const resend = getResendClient();
   const from = process.env.RESEND_FROM_EMAIL;
 
   if (!resend || !from) {
-    return { status: "disabled" };
+    return {
+      customer: { status: "disabled" },
+      owner: { status: "disabled" },
+    };
   }
 
   try {
     const cancelUrl = `${getSiteUrl()}/cancel/${encodeURIComponent(cancelToken)}`;
+    const ownerEmail = process.env.RESEND_OWNER_EMAIL;
 
-    await resend.emails.send({
-      from,
-      to: appointment.email,
-      bcc: process.env.RESEND_OWNER_EMAIL || undefined,
-      subject: `Confirmation de votre rendez-vous - ${salon.name}`,
-      html: buildConfirmationHtml(appointment, cancelUrl),
-    });
+    const [customerResult, ownerResult] = await Promise.allSettled([
+      resend.emails.send({
+        from,
+        to: appointment.email,
+        subject: `Confirmation de votre rendez-vous - ${salon.name}`,
+        html: buildConfirmationHtml(appointment, cancelUrl),
+      }),
+      ownerEmail
+        ? resend.emails.send({
+            from,
+            to: ownerEmail,
+            subject: `Nouveau rendez-vous - ${appointment.name}`,
+            html: buildOwnerBookingHtml(appointment),
+          })
+        : Promise.resolve(undefined),
+    ]);
 
-    return { status: "sent" };
+    return {
+      customer:
+        customerResult.status === "fulfilled"
+          ? { status: "sent" }
+          : {
+              status: "failed",
+              error:
+                customerResult.reason instanceof Error
+                  ? customerResult.reason.message
+                  : "Impossible d'envoyer l'email cliente.",
+            },
+      owner: !ownerEmail
+        ? { status: "disabled" }
+        : ownerResult.status === "fulfilled"
+          ? { status: "sent" }
+          : {
+              status: "failed",
+              error:
+                ownerResult.reason instanceof Error
+                  ? ownerResult.reason.message
+                  : "Impossible d'envoyer l'email salon.",
+            },
+    };
   } catch (error) {
     console.error("resend.appointment_confirmation.failed", error);
 
     return {
-      status: "failed",
-      error:
-        error instanceof Error
-          ? error.message
-          : "Impossible d'envoyer l'email de confirmation.",
+      customer: {
+        status: "failed",
+        error:
+          error instanceof Error
+            ? error.message
+            : "Impossible d'envoyer l'email de confirmation.",
+      },
+      owner: { status: "disabled" },
     };
   }
 }
