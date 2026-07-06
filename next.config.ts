@@ -14,7 +14,7 @@ const nextConfig: NextConfig = {
             value: "www.astghidnails.com",
           },
         ],
-        destination: "https://astghidnails.com/:path*",
+        destination: "https://astghidnails.com",
         permanent: true,
       },
     ];
