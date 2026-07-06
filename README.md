@@ -4,6 +4,12 @@ Site Next.js complet pour un salon de nails : prestations, tarifs, promotions,
 galerie, contact et réservation en ligne. Le projet tourne en localhost et se
 déploie sur Cloudflare Workers via OpenNext.
 
+Production :
+
+```bash
+https://astghidnails.com
+```
+
 ## Lancer en local
 
 ```bash
@@ -81,7 +87,7 @@ cp .env.example .env.local
 Variables prévues :
 
 ```bash
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SITE_URL=https://astghidnails.com
 GOOGLE_CLIENT_EMAIL=
 GOOGLE_PRIVATE_KEY=
 GOOGLE_CALENDAR_ID=

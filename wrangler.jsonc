@@ -2,8 +2,19 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "astghid-nails",
   "main": ".open-next/worker.js",
+  "workers_dev": true,
   "compatibility_date": "2026-07-05",
   "compatibility_flags": ["nodejs_compat"],
+  "routes": [
+    {
+      "pattern": "astghidnails.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.astghidnails.com",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
