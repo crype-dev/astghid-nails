@@ -6,6 +6,7 @@ import {
   listAppointments,
 } from "@/lib/scheduling";
 import { services } from "@/data/site";
+import { sendAppointmentConfirmation } from "@/lib/email";
 
 export const runtime = "nodejs";
 
@@ -63,11 +64,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: result.error }, { status: 400 });
     }
 
+    const emailResult = await sendAppointmentConfirmation(result.appointment);
+    const message =
+      emailResult.status === "sent"
+        ? "Rendez-vous enregistré. Un email de confirmation vient d'être envoyé."
+        : emailResult.status === "failed"
+          ? "Rendez-vous enregistré. L'email de confirmation n'a pas pu être envoyé."
+          : "Rendez-vous enregistré. Le créneau est maintenant bloqué.";
+
     return NextResponse.json(
       {
         appointment: result.appointment,
         mode: "mode" in result ? result.mode : undefined,
-        message: "Rendez-vous enregistré. Le créneau est maintenant bloqué.",
+        emailStatus: emailResult.status,
+        message,
       },
       { status: 201 },
     );

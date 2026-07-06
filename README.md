@@ -93,11 +93,23 @@ GOOGLE_PRIVATE_KEY=
 GOOGLE_CALENDAR_ID=
 RESEND_API_KEY=
 RESEND_FROM_EMAIL=
+RESEND_OWNER_EMAIL=
 ```
 
 Google Calendar et Resend sont préparés côté configuration, mais pas activés
 par défaut. Le comportement actuel est volontairement local et explicite pour
 éviter tout faux succès.
+
+Pour activer les emails de confirmation avec Resend :
+
+```bash
+RESEND_API_KEY=re_xxxxxxxxx
+RESEND_FROM_EMAIL=Astghid Nails <reservations@astghidnails.com>
+RESEND_OWNER_EMAIL=astghid86@gmail.com
+```
+
+Remplacer `re_xxxxxxxxx` par la vraie clé API Resend, puis ajouter les mêmes
+variables en secrets Cloudflare avant de redéployer.
 
 ## Modifier le contenu
 
