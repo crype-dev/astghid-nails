@@ -25,7 +25,13 @@ function formatDate(date: string) {
   }).format(new Date(`${date}T12:00:00`));
 }
 
-export function CancelAppointment({ token }: { token: string }) {
+export function CancelAppointment({
+  appointmentId,
+  token,
+}: {
+  appointmentId?: string;
+  token: string;
+}) {
   const [state, setState] = useState<CancelState>({
     type: "loading",
     message: "Vérification du rendez-vous...",
@@ -37,8 +43,14 @@ export function CancelAppointment({ token }: { token: string }) {
 
     async function loadAppointment() {
       try {
+        const params = new URLSearchParams({ token });
+
+        if (appointmentId) {
+          params.set("id", appointmentId);
+        }
+
         const response = await fetch(
-          `/api/appointments/cancel?token=${encodeURIComponent(token)}`,
+          `/api/appointments/cancel?${params.toString()}`,
           { cache: "no-store" },
         );
         const data = (await response.json()) as {
@@ -84,7 +96,7 @@ export function CancelAppointment({ token }: { token: string }) {
     return () => {
       ignore = true;
     };
-  }, [token]);
+  }, [appointmentId, token]);
 
   async function cancelAppointment() {
     setSubmitting(true);
@@ -93,7 +105,7 @@ export function CancelAppointment({ token }: { token: string }) {
       const response = await fetch("/api/appointments/cancel", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token }),
+        body: JSON.stringify({ id: appointmentId, token }),
       });
       const data = (await response.json()) as {
         appointment?: Appointment;

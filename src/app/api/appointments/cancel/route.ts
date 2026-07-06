@@ -11,7 +11,8 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const token = searchParams.get("token") ?? "";
-    const result = await getAppointmentByCancelToken(token);
+    const appointmentId = searchParams.get("id") ?? undefined;
+    const result = await getAppointmentByCancelToken(token, appointmentId);
 
     if ("error" in result) {
       return NextResponse.json({ message: result.error }, { status: 404 });
@@ -29,8 +30,8 @@ export async function GET(request: Request) {
 
 export async function POST(request: Request) {
   try {
-    const payload = (await request.json()) as { token?: string };
-    const result = await cancelAppointmentByToken(payload.token);
+    const payload = (await request.json()) as { id?: string; token?: string };
+    const result = await cancelAppointmentByToken(payload.token, payload.id);
 
     if (result.error) {
       const status = result.error.includes("déjà annulé") ? 409 : 404;

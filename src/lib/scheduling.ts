@@ -532,7 +532,10 @@ export async function createAppointment(payload: AppointmentPayload) {
   return { appointment: validation.appointment, cancelToken, mode: "local-json" as const };
 }
 
-export async function getAppointmentByCancelToken(token?: string) {
+export async function getAppointmentByCancelToken(
+  token?: string,
+  appointmentId?: string,
+) {
   if (!token || token.length < 20) {
     return { error: "Lien d'annulation invalide." };
   }
@@ -547,30 +550,33 @@ export async function getAppointmentByCancelToken(token?: string) {
           date, time, name, phone, email, message, status, cancelled_at, created_at
          FROM appointments
          WHERE cancel_token_hash = ?
+         ${appointmentId ? "AND id = ?" : ""}
          LIMIT 1`,
       )
-      .bind(cancelTokenHash)
+      .bind(...(appointmentId ? [cancelTokenHash, appointmentId] : [cancelTokenHash]))
       .all<AppointmentRow>();
     const appointment = rows.results?.[0];
 
     return appointment
       ? { appointment: toAppointment(appointment) }
-      : { error: "Lien d'annulation invalide." };
+      : { error: "Lien d'annulation invalide ou expiré." };
   }
 
   const appointment = (await readLocalAppointments()).find(
-    (item) => item.cancelTokenHash === cancelTokenHash,
+    (item) =>
+      item.cancelTokenHash === cancelTokenHash &&
+      (appointmentId ? item.id === appointmentId : true),
   );
 
   if (!appointment) {
-    return { error: "Lien d'annulation invalide." };
+    return { error: "Lien d'annulation invalide ou expiré." };
   }
 
   return { appointment: toPublicAppointment(appointment) };
 }
 
-export async function cancelAppointmentByToken(token?: string) {
-  const result = await getAppointmentByCancelToken(token);
+export async function cancelAppointmentByToken(token?: string, appointmentId?: string) {
+  const result = await getAppointmentByCancelToken(token, appointmentId);
 
   if ("error" in result) {
     return result;
@@ -589,15 +595,21 @@ export async function cancelAppointmentByToken(token?: string) {
       .prepare(
         `UPDATE appointments
          SET status = 'cancelled', cancelled_at = ?
-         WHERE cancel_token_hash = ? AND status != 'cancelled'`,
+         WHERE cancel_token_hash = ? AND status != 'cancelled'
+         ${appointmentId ? "AND id = ?" : ""}`,
       )
-      .bind(cancelledAt, cancelTokenHash)
+      .bind(
+        ...(appointmentId
+          ? [cancelledAt, cancelTokenHash, appointmentId]
+          : [cancelledAt, cancelTokenHash]),
+      )
       .run();
   } else {
     const appointments = await readLocalAppointments();
     await writeLocalAppointments(
       appointments.map((appointment) =>
-        appointment.cancelTokenHash === cancelTokenHash
+        appointment.cancelTokenHash === cancelTokenHash &&
+        (appointmentId ? appointment.id === appointmentId : true)
           ? { ...appointment, status: "cancelled", cancelledAt }
           : appointment,
       ),

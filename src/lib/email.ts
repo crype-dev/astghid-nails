@@ -143,7 +143,9 @@ export async function sendAppointmentConfirmation(
   }
 
   try {
-    const cancelUrl = `${getSiteUrl()}/cancel/${encodeURIComponent(cancelToken)}`;
+    const cancelUrl = `${getSiteUrl()}/cancel/${encodeURIComponent(
+      appointment.id,
+    )}/${encodeURIComponent(cancelToken)}`;
     const ownerEmail = process.env.RESEND_OWNER_EMAIL;
 
     const [customerResult, ownerResult] = await Promise.allSettled([

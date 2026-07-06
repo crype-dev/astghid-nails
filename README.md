@@ -119,7 +119,7 @@ bounces.
 Les emails de confirmation contiennent un lien sécurisé d'annulation :
 
 ```bash
-https://astghidnails.com/cancel/[token]
+https://astghidnails.com/cancel/[id]/[token]
 ```
 
 Le token brut n'est jamais stocké en base. D1 stocke uniquement son hash.

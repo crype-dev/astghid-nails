@@ -5,11 +5,11 @@ export const metadata = {
 };
 
 type CancelPageProps = {
-  params: Promise<{ token: string }>;
+  params: Promise<{ idOrToken: string }>;
 };
 
 export default async function CancelPage({ params }: CancelPageProps) {
-  const { token } = await params;
+  const { idOrToken } = await params;
 
-  return <CancelAppointment token={token} />;
+  return <CancelAppointment token={idOrToken} />;
 }
