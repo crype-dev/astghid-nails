@@ -83,7 +83,7 @@ main {
   gap: 18px;
   grid-template-columns: auto 1fr auto;
   left: 0;
-  padding: 16px clamp(18px, 5vw, 72px);
+  padding: 6px clamp(18px, 5vw, 72px);
   position: sticky;
   right: 0;
   top: 0;
@@ -109,9 +109,12 @@ main {
 }
 
 .logo-img {
-  border-radius: 999px;
-  object-fit: cover;
-  border: 1px solid rgba(215, 143, 159, 0.2);
+  object-fit: contain;
+  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.logo-img:hover {
+  transform: scale(1.06);
 }
 
 nav {

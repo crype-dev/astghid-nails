@@ -54,11 +54,11 @@ export default function Home() {
           <Image
             alt="Logo Astghid Nails"
             src="/images/logo.png"
-            width={38}
-            height={38}
+            width={72}
+            height={72}
             className="logo-img"
+            priority
           />
-          Astghid Nails
         </a>
         <nav aria-label="Navigation principale">
           <a href="#prestations">Prestations</a>
