@@ -405,7 +405,14 @@ figcaption span {
   display: grid;
   gap: 18px;
   grid-template-columns: 1fr auto;
-  padding: 20px 0;
+  padding: 18px 12px;
+  transition: background-color 250ms ease, padding-left 250ms ease;
+  border-radius: 8px;
+}
+
+.price-row:hover {
+  background-color: rgba(215, 143, 159, 0.05);
+  padding-left: 20px;
 }
 
 .price-row div {
@@ -418,6 +425,12 @@ figcaption span {
   font-weight: 850;
   margin: 0;
   text-align: right;
+  transition: transform 250ms ease, color 250ms ease;
+}
+
+.price-row:hover p {
+  transform: translateX(-4px);
+  color: var(--rose-deep);
 }
 
 .booking-panel {
@@ -628,7 +641,20 @@ code {
   border-radius: 999px;
   color: var(--muted);
   font-weight: 750;
-  padding: 10px 14px;
+  padding: 10px 18px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.60);
+  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  font-size: 0.88rem;
+  box-shadow: 0 4px 12px rgba(43, 29, 34, 0.02);
+}
+
+.filter-row span:hover {
+  color: var(--rose-deep);
+  border-color: var(--rose-deep);
+  background: var(--cream);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(180, 92, 113, 0.08);
 }
 
 .gallery-grid {
@@ -1092,7 +1118,6 @@ iframe {
 }
 
 @media (max-width: 980px) {
-  .site-header,
   .hero,
   .split-section,
   .promo-section,
@@ -1103,11 +1128,28 @@ iframe {
 
   .site-header {
     position: static;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 24px;
+  }
+
+  .brand {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .brand .logo-img {
+    width: 110px !important;
+    height: 110px !important;
   }
 
   nav {
-    justify-content: start;
-    overflow-x: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    width: 100%;
   }
 
   .hero {
@@ -1188,9 +1230,17 @@ iframe {
   .promo-grid,
   .testimonial-grid,
   .form-grid,
-  .appointment-slots-grid,
-  .trust-band {
+  .appointment-slots-grid {
     grid-template-columns: 1fr;
+  }
+
+  .trust-band {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .trust-band span {
+    padding: 14px 10px;
+    font-size: 0.86rem;
   }
 
   .price-row {
@@ -1200,5 +1250,25 @@ iframe {
 
   .price-row p {
     text-align: left;
+  }
+}
+
+/* Active booking slot */
+.active-slot {
+  background-color: var(--rose-deep) !important;
+  color: #ffffff !important;
+  border-color: var(--rose-deep) !important;
+  box-shadow: 0 8px 20px rgba(180, 92, 113, 0.2) !important;
+}
+
+.active-slot:hover {
+  background-color: var(--rose-deep) !important;
+  opacity: 0.9;
+}
+
+/* Tablet form alignment */
+@media (max-width: 980px) and (min-width: 641px) {
+  .email-field {
+    grid-column: span 2;
   }
 }

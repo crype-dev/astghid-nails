@@ -2,10 +2,8 @@ import { BookingForm } from "@/components/booking-form";
 import {
   gallery,
   openingHours,
-  promotions,
   salon,
   services,
-  testimonials,
 } from "@/data/site";
 import Image from "next/image";
 
@@ -54,21 +52,19 @@ export default function Home() {
           <Image
             alt="Logo Astghid Nails"
             src="/images/logo.png"
-            width={72}
-            height={72}
+            width={96}
+            height={96}
             className="logo-img"
             priority
           />
         </a>
         <nav aria-label="Navigation principale">
           <a href="#prestations">Prestations</a>
+          <a href="#rendez-vous">Réserver</a>
           <a href="#tarifs">Tarifs</a>
           <a href="#galerie">Galerie</a>
           <a href="#contact">Contact</a>
         </nav>
-        <a className="header-action" href="#rendez-vous">
-          Réserver
-        </a>
       </header>
 
       <section className="hero" id="accueil">
@@ -203,57 +199,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="section muted" id="avis">
-        <div className="section-heading">
-          <p className="eyebrow">Avis clientes</p>
-          <h2>Des rendez-vous soignés, du premier accueil à la finition.</h2>
-          <p>
-            Quelques retours courts pour donner une idée du niveau d&apos;exigence
-            attendu au salon.
-          </p>
-        </div>
 
-        <div className="testimonial-grid">
-          {testimonials.map((testimonial) => (
-            <article className="testimonial-card" key={testimonial.name}>
-              <span aria-label="Note 5 sur 5">★★★★★</span>
-              <p>“{testimonial.quote}”</p>
-              <div>
-                <strong>{testimonial.name}</strong>
-                <small>{testimonial.service}</small>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="promo-section">
-        <div className="section-heading compact">
-          <p className="eyebrow">Promotions</p>
-          <h2>Offres du moment.</h2>
-        </div>
-        <div className="promo-grid">
-          {promotions.map((promotion) => (
-            <article key={promotion.title}>
-              <span>{promotion.price}</span>
-              <h3>{promotion.title}</h3>
-              <p>{promotion.detail}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="about-section">
-        <div>
-          <p className="eyebrow">À propos</p>
-          <h2>Une onglerie calme, précise et orientée résultat.</h2>
-        </div>
-        <p>
-          Astghid Nails accueille chaque cliente avec une analyse rapide de la
-          base naturelle, du style souhaité et du rythme de retouche. Le but :
-          une pose belle le jour même, mais aussi propre à porter au quotidien.
-        </p>
-      </section>
 
       <section className="contact-section" id="contact">
         <div className="contact-card">

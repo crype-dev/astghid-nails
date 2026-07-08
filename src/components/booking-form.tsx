@@ -223,7 +223,7 @@ export function BookingForm() {
               ) : slots.length > 0 ? (
                 slots.map((availableSlot) => (
                   <Button
-                    className="appointment-slot-button"
+                    className={`appointment-slot-button ${slot === availableSlot ? "active-slot" : ""}`}
                     key={availableSlot}
                     onClick={() => setSlot(availableSlot)}
                     size="sm"
@@ -260,7 +260,7 @@ export function BookingForm() {
           />
         </label>
 
-        <label>
+        <label className="email-field">
           Email
           <input name="email" type="email" placeholder="vous@email.com" required />
         </label>
