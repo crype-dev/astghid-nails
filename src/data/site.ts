@@ -171,8 +171,7 @@ export const gallery: GalleryItem[] = [
   {
     title: "Gel nude",
     category: "gel",
-    image:
-      "https://images.unsplash.com/photo-1610992015732-2449b76344bc?auto=format&fit=crop&w=900&q=85",
+    image: "/images/hero-nails.png",
   },
   {
     title: "Rouge classique",
@@ -183,8 +182,7 @@ export const gallery: GalleryItem[] = [
   {
     title: "Détails brillants",
     category: "nail-art",
-    image:
-      "https://images.unsplash.com/photo-1632345031435-8727f6897d53?auto=format&fit=crop&w=900&q=85",
+    image: "/images/nail-art-chrome.png",
   },
   {
     title: "Soin pieds",
@@ -195,7 +193,6 @@ export const gallery: GalleryItem[] = [
   {
     title: "Rose laiteux",
     category: "gel",
-    image:
-      "https://images.unsplash.com/photo-1604902396830-aca29e19b067?auto=format&fit=crop&w=900&q=85",
+    image: "/images/milky-rose.png",
   },
 ];

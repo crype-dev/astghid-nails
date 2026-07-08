@@ -1,6 +1,7 @@
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { services } from "@/data/site";
-import { isWithinAppointmentWindow } from "@/lib/appointment-dates";
+import { getTodayKey, isWithinAppointmentWindow } from "@/lib/appointment-dates";
+
 
 export type Appointment = {
   id: string;
@@ -114,7 +115,7 @@ export async function getDatabase() {
 }
 
 export function isPastDate(date: string) {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = getTodayKey();
   return date < today;
 }
 

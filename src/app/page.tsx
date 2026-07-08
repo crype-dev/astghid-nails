@@ -86,7 +86,7 @@ export default function Home() {
           <Image
             alt="Pose d'ongles nude brillante"
             height={900}
-            src="https://images.unsplash.com/photo-1604654894610-df63bc536371?auto=format&fit=crop&w=1200&q=90"
+            src="/images/hero-nails.png"
             priority
             width={760}
           />
