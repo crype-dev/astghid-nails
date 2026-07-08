@@ -108,6 +108,12 @@ main {
   width: 38px;
 }
 
+.logo-img {
+  border-radius: 999px;
+  object-fit: cover;
+  border: 1px solid rgba(215, 143, 159, 0.2);
+}
+
 nav {
   display: flex;
   gap: 22px;

@@ -51,7 +51,13 @@ export default function Home() {
       />
       <header className="site-header">
         <a className="brand" href="#accueil" aria-label="Astghid Nails accueil">
-          <span>AN</span>
+          <Image
+            alt="Logo Astghid Nails"
+            src="/images/logo.png"
+            width={38}
+            height={38}
+            className="logo-img"
+          />
           Astghid Nails
         </a>
         <nav aria-label="Navigation principale">
