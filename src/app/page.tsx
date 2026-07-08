@@ -84,9 +84,9 @@ export default function Home() {
         </div>
         <div className="hero-media" aria-label="Manucure premium">
           <Image
-            alt="Pose d'ongles nude brillante"
+            alt="Pose d'ongles multicolore par notre mascotte"
             height={900}
-            src="/images/hero-nails.png"
+            src="/images/hero-mascot.png"
             priority
             width={760}
           />
