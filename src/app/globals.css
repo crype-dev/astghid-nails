@@ -589,10 +589,29 @@ textarea:focus {
 }
 
 .booking-note {
-  color: var(--muted);
-  font-size: 0.86rem;
+  background: linear-gradient(135deg, rgba(255, 248, 245, 0.96), rgba(248, 230, 234, 0.72));
+  border: 1px solid rgba(168, 78, 100, 0.18);
+  border-radius: 8px;
+  color: var(--ink);
+  display: grid;
+  gap: 3px;
+  font-size: 0.9rem;
   line-height: 1.55;
-  margin: 14px 0 0;
+  margin: 14px 0 2px;
+  padding: 12px 14px;
+}
+
+.booking-note span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.booking-note strong {
+  color: var(--rose-deep);
+  font-weight: 850;
 }
 
 code {

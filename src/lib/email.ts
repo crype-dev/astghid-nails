@@ -45,7 +45,7 @@ function getSiteUrl() {
 }
 
 function getLogoUrl() {
-  return `${getSiteUrl()}/favicon.ico`;
+  return `${getSiteUrl()}/astghid-logo.png`;
 }
 
 function buildButton(href: string, label: string, background = "#171013") {

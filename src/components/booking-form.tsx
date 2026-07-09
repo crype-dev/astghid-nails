@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { services } from "@/data/site";
+import { salon, services } from "@/data/site";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -185,6 +185,11 @@ export function BookingForm() {
         <span>{selectedService.duration} min</span>
         <strong>{selectedService.price}</strong>
         <p>{selectedService.description}</p>
+      </div>
+
+      <div className="booking-note" aria-label="Adresse du salon">
+        <span>Le rendez-vous se déroule au salon</span>
+        <strong>{salon.address}</strong>
       </div>
 
       <div className="appointment-picker">
