@@ -1,19 +1,10 @@
 import { BookingForm } from "@/components/booking-form";
 import {
   gallery,
-  openingHours,
   salon,
   services,
 } from "@/data/site";
 import Image from "next/image";
-
-const categories = [
-  { label: "Gel", value: "gel" },
-  { label: "Semi-permanent", value: "semi" },
-  { label: "Retouche", value: "retouche" },
-  { label: "Nail art", value: "nail-art" },
-  { label: "Pieds", value: "pieds" },
-];
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
@@ -117,13 +108,7 @@ export default function Home() {
       <section className="section" id="galerie">
         <div className="section-heading">
           <p className="eyebrow text-gradient">Inspirations</p>
-          <h2 className="text-gradient">Inspirations et finitions.</h2>
-        </div>
-
-        <div className="filter-row" aria-label="Catégories galerie">
-          {categories.map((category) => (
-            <span key={category.value}>{category.label}</span>
-          ))}
+          <h2 className="text-gradient">Les créations de astghid nails</h2>
         </div>
 
         <div className="gallery-grid">
@@ -133,52 +118,12 @@ export default function Home() {
               <figcaption>
                 <strong>{item.title}</strong>
                 <span>
-                  {categories.find((category) => category.value === item.category)
-                    ?.label ?? item.category}
+                  {item.category === "semi" ? "Semi-permanent" : 
+                   item.category.charAt(0).toUpperCase() + item.category.slice(1)}
                 </span>
               </figcaption>
             </figure>
           ))}
-        </div>
-      </section>
-
-
-
-      <section className="contact-section" id="contact">
-        <div className="contact-card">
-          <p className="eyebrow">Contact</p>
-          <h2>Passer au salon ou réserver en ligne.</h2>
-          <div className="contact-list">
-            {salon.phone ? <a href={`tel:${salon.phone}`}>{salon.phone}</a> : null}
-            {salon.email ? (
-              <a href={`mailto:${salon.email}`}>{salon.email}</a>
-            ) : null}
-            <span>{salon.address}</span>
-            <a href="#rendez-vous">Réserver en ligne</a>
-            {salon.whatsapp || salon.instagram || salon.facebook ? (
-              <div className="social-row">
-                {salon.whatsapp ? <a href={salon.whatsapp}>WhatsApp</a> : null}
-                {salon.instagram ? <a href={salon.instagram}>Instagram</a> : null}
-                {salon.facebook ? <a href={salon.facebook}>Facebook</a> : null}
-              </div>
-            ) : null}
-          </div>
-        </div>
-
-        <div className="hours-card">
-          <h3>Horaires</h3>
-          {openingHours.map((item) => (
-            <div key={item.day}>
-              <span>{item.day}</span>
-              <strong>{item.hours}</strong>
-            </div>
-          ))}
-          <iframe
-            title="Carte du salon"
-            src={`https://www.google.com/maps?q=${encodeURIComponent(
-              salon.mapsQuery,
-            )}&output=embed`}
-          />
         </div>
       </section>
     </main>
