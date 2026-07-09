@@ -11,7 +11,7 @@ const localBusinessSchema = {
   "@type": "BeautySalon",
   name: salon.name,
   description:
-    "Onglerie à Charleroi spécialisée en pose gel, semi-permanent, retouches et nail art.",
+    "Onglerie à Gilly spécialisée en pose gel, semi-permanent, retouches et nail art.",
   address: {
     "@type": "PostalAddress",
     streetAddress: "Rue des Hayettes 54",
@@ -19,7 +19,7 @@ const localBusinessSchema = {
     addressLocality: "Gilly",
     addressCountry: "BE",
   },
-  areaServed: ["Gilly", "Charleroi"],
+  areaServed: "Gilly",
   openingHours: [
     "Tu 10:00-18:30",
     "We 10:00-18:30",

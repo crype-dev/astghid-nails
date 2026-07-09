@@ -13,13 +13,13 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "Astghid Nails | Onglerie premium à Charleroi",
+  title: "Astghid Nails | Onglerie premium à Gilly",
   description:
-    "Salon de nails à Charleroi : pose gel, semi-permanent, retouches, nail art et rendez-vous en ligne.",
+    "Salon de nails à Gilly : pose gel, semi-permanent, retouches, nail art et rendez-vous en ligne.",
   openGraph: {
     title: "Astghid Nails",
     description:
-      "Onglerie premium à Charleroi avec tarifs clairs et réservation en ligne.",
+      "Onglerie premium à Gilly avec tarifs clairs et réservation en ligne.",
     type: "website",
   },
 };

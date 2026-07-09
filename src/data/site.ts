@@ -29,7 +29,7 @@ export type Testimonial = {
 
 export const salon = {
   name: "Astghid Nails",
-  baseline: "Onglerie premium à Charleroi",
+  baseline: "Onglerie premium à Gilly",
   phone: "",
   email: "",
   address: "Rue des Hayettes 54, 6060 Gilly",
