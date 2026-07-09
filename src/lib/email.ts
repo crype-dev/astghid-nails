@@ -44,6 +44,10 @@ function getSiteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL ?? "https://astghidnails.com";
 }
 
+function getLogoUrl() {
+  return `${getSiteUrl()}/favicon.ico`;
+}
+
 function buildButton(href: string, label: string, background = "#171013") {
   return `
     <a href="${escapeHtml(href)}"
@@ -59,46 +63,82 @@ function buildConfirmationHtml(appointment: Appointment, cancelUrl: string) {
   const safePrice = escapeHtml(appointment.servicePrice);
   const safeAddress = escapeHtml(salon.address);
   const safeSiteUrl = escapeHtml(getSiteUrl());
+  const safeLogoUrl = escapeHtml(getLogoUrl());
 
   return `
-    <div style="margin:0;padding:0;background:#fffaf8">
-      <div style="max-width:620px;margin:0 auto;padding:28px 16px;font-family:Arial,sans-serif;color:#241b1f;line-height:1.6">
-        <div style="border:1px solid #eadfda;border-radius:14px;overflow:hidden;background:#ffffff">
-          <div style="background:#171013;color:#fff6ef;padding:26px 24px">
-            <p style="margin:0 0 8px;color:#f0bcc9;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">
+    <div style="margin:0;padding:0;background:#fff8f5">
+      <div style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0">
+        Votre rendez-vous chez ${escapeHtml(salon.name)} est confirmé.
+      </div>
+      <div style="max-width:640px;margin:0 auto;padding:28px 14px;font-family:Arial,Helvetica,sans-serif;color:#261c21;line-height:1.6">
+        <div style="border:1px solid #eadcd5;border-radius:18px;overflow:hidden;background:#ffffff;box-shadow:0 10px 32px rgba(38,28,33,.08)">
+          <div style="background:#fbefe9;padding:26px 24px 22px;text-align:center;border-bottom:1px solid #eadcd5">
+            <img src="${safeLogoUrl}" width="58" height="58" alt="${escapeHtml(
+              salon.name,
+            )}" style="display:block;width:58px;height:58px;margin:0 auto 12px;border:0;border-radius:999px;outline:none;text-decoration:none">
+            <p style="margin:0;color:#a84e64;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">
               ${escapeHtml(salon.name)}
             </p>
-            <h1 style="font-size:24px;line-height:1.2;margin:0">Votre rendez-vous est confirmé</h1>
+            <p style="margin:4px 0 0;color:#7d6d70;font-size:13px">${escapeHtml(
+              salon.baseline,
+            )}</p>
           </div>
 
-          <div style="padding:24px">
-            <p style="margin:0 0 14px">Bonjour ${safeName},</p>
-            <p style="margin:0 0 18px">Merci pour votre réservation chez <strong>${escapeHtml(salon.name)}</strong>. Voici le résumé complet de votre rendez-vous.</p>
+          <div style="padding:28px 24px 24px">
+            <p style="margin:0 0 10px;color:#b88942;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">Confirmation</p>
+            <h1 style="font-size:28px;line-height:1.2;margin:0 0 14px;color:#261c21">Votre rendez-vous est confirmé</h1>
+            <p style="margin:0 0 20px;color:#5f5358">Bonjour ${safeName}, merci pour votre réservation. Voici toutes les informations utiles pour votre passage au salon.</p>
 
-            <div style="border:1px solid #eadfda;border-radius:10px;padding:18px;margin:20px 0;background:#fffaf8">
-              <p style="margin:0 0 10px"><strong>Prestation :</strong> ${safeService}</p>
-              <p style="margin:0 0 10px"><strong>Date :</strong> ${formatAppointmentDate(appointment.date)}</p>
-              <p style="margin:0 0 10px"><strong>Heure :</strong> ${appointment.time}</p>
-              <p style="margin:0 0 10px"><strong>Durée :</strong> ${appointment.serviceDurationMinutes} min</p>
-              <p style="margin:0"><strong>Prix :</strong> ${safePrice}</p>
+            <div style="border:1px solid #eadcd5;border-radius:14px;padding:20px;margin:22px 0;background:#fffaf8">
+              <p style="margin:0 0 14px;color:#a84e64;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em">Détails du rendez-vous</p>
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+                <tr>
+                  <td style="padding:8px 0;color:#7d6d70;font-size:14px">Prestation</td>
+                  <td style="padding:8px 0;color:#261c21;font-size:14px;font-weight:700;text-align:right">${safeService}</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 0;color:#7d6d70;font-size:14px">Date</td>
+                  <td style="padding:8px 0;color:#261c21;font-size:14px;font-weight:700;text-align:right">${formatAppointmentDate(
+                    appointment.date,
+                  )}</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 0;color:#7d6d70;font-size:14px">Heure</td>
+                  <td style="padding:8px 0;color:#261c21;font-size:14px;font-weight:700;text-align:right">${appointment.time}</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 0;color:#7d6d70;font-size:14px">Durée</td>
+                  <td style="padding:8px 0;color:#261c21;font-size:14px;font-weight:700;text-align:right">${appointment.serviceDurationMinutes} min</td>
+                </tr>
+                <tr>
+                  <td style="padding:8px 0;color:#7d6d70;font-size:14px">Prix</td>
+                  <td style="padding:8px 0;color:#261c21;font-size:14px;font-weight:700;text-align:right">${safePrice}</td>
+                </tr>
+              </table>
             </div>
 
-            <p style="margin:0 0 12px"><strong>Adresse :</strong> ${safeAddress}</p>
-            <p style="margin:0 0 18px">Si vous ne pouvez plus venir, merci d'annuler via le lien ci-dessous afin de libérer le créneau.</p>
+            <div style="border-left:4px solid #d7a85d;padding:2px 0 2px 14px;margin:0 0 22px">
+              <p style="margin:0;color:#7d6d70;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em">Informations pratiques</p>
+              <p style="margin:6px 0 0;color:#261c21"><strong>Adresse :</strong> ${safeAddress}</p>
+              <p style="margin:6px 0 0;color:#5f5358">En cas d'empêchement, merci d'annuler via le lien ci-dessous afin de libérer le créneau.</p>
+            </div>
 
-            <div style="margin:22px 0">
+            <div style="margin:22px 0 6px">
               ${buildButton(getSiteUrl(), "Voir le site")}
               ${buildButton(cancelUrl, "Annuler mon rendez-vous", "#a84e64")}
             </div>
 
-            <p style="font-size:13px;color:#7d6d70;margin:18px 0 0">
+            <p style="font-size:12px;color:#7d6d70;margin:18px 0 0;line-height:1.5">
               Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br>
               <a href="${escapeHtml(cancelUrl)}" style="color:#a84e64;word-break:break-all">${escapeHtml(cancelUrl)}</a>
             </p>
           </div>
 
-          <div style="padding:18px 24px;background:#fff6ef;border-top:1px solid #eadfda;color:#7d6d70;font-size:13px">
-            À bientôt,<br><strong style="color:#241b1f">${escapeHtml(salon.name)}</strong><br>
+          <div style="padding:20px 24px;background:#171013;color:#fff6ef;font-size:13px;text-align:center">
+            <strong style="display:block;color:#ffffff;margin-bottom:4px">${escapeHtml(
+              salon.name,
+            )}</strong>
+            <span style="color:#eadcd5">${safeAddress}</span><br>
             <a href="${safeSiteUrl}" style="color:#a84e64">${safeSiteUrl}</a>
           </div>
         </div>

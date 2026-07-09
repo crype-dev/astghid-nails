@@ -14,10 +14,12 @@ const localBusinessSchema = {
     "Onglerie à Charleroi spécialisée en pose gel, semi-permanent, retouches et nail art.",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Charleroi",
+    streetAddress: "Rue des Hayettes 54",
+    postalCode: "6060",
+    addressLocality: "Gilly",
     addressCountry: "BE",
   },
-  areaServed: "Charleroi",
+  areaServed: ["Gilly", "Charleroi"],
   openingHours: [
     "Tu 10:00-18:30",
     "We 10:00-18:30",

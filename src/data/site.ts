@@ -32,11 +32,11 @@ export const salon = {
   baseline: "Onglerie premium à Charleroi",
   phone: "",
   email: "",
-  address: "Charleroi, Belgique",
+  address: "Rue des Hayettes 54, 6060 Gilly",
   instagram: "",
   facebook: "",
   whatsapp: "",
-  mapsQuery: "Charleroi, Belgique",
+  mapsQuery: "Rue des Hayettes 54, 6060 Gilly",
 };
 
 export const openingHours = [
