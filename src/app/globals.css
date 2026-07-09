@@ -76,17 +76,11 @@ main {
 
 .site-header {
   align-items: center;
-  backdrop-filter: blur(20px);
-  background: rgba(255, 250, 248, 0.76);
-  border-bottom: 1px solid rgba(215, 143, 159, 0.08);
   display: flex;
   justify-content: center;
-  left: 0;
-  padding: 8px clamp(18px, 5vw, 72px);
-  position: sticky;
-  right: 0;
-  top: 0;
-  z-index: 20;
+  padding: 24px clamp(18px, 5vw, 72px) 12px clamp(18px, 5vw, 72px);
+  background: transparent;
+  border-bottom: none;
 }
 
 .brand {
@@ -1137,8 +1131,8 @@ iframe {
   }
 
   .brand .logo-img {
-    width: 130px !important;
-    height: 130px !important;
+    width: 150px !important;
+    height: 150px !important;
   }
 
   .hero {
@@ -1252,4 +1246,24 @@ iframe {
   .email-field {
     grid-column: span 2;
   }
+}
+
+/* Custom form labels and input placeholders styling */
+.form-grid label span {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(180, 92, 113, 0.45) !important;
+  font-style: italic;
+  transition: color 250ms ease;
+}
+
+input:focus::placeholder,
+textarea:focus::placeholder {
+  color: rgba(180, 92, 113, 0.25) !important;
 }

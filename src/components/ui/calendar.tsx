@@ -62,13 +62,30 @@ function Calendar({
   );
 
   const defaultComponents = {
-    Chevron: (props: { orientation?: "left" | "right" | "up" | "down" }) => {
-      if (props.orientation === "left") {
-        return <ChevronLeft aria-hidden="true" size={16} strokeWidth={2} />;
-      }
-
-      return <ChevronRight aria-hidden="true" size={16} strokeWidth={2} />;
-    },
+    PreviousMonthButton: ({ className, ...props }: React.ComponentPropsWithoutRef<"button">) => (
+      <button
+        {...props}
+        className={cn(
+          buttonVariants({ variant: "ghost" }),
+          "size-9 text-muted-foreground/80 hover:text-foreground p-0 absolute left-2 top-2 z-20",
+          className
+        )}
+      >
+        <ChevronLeft size={16} />
+      </button>
+    ),
+    NextMonthButton: ({ className, ...props }: React.ComponentPropsWithoutRef<"button">) => (
+      <button
+        {...props}
+        className={cn(
+          buttonVariants({ variant: "ghost" }),
+          "size-9 text-muted-foreground/80 hover:text-foreground p-0 absolute right-2 top-2 z-20",
+          className
+        )}
+      >
+        <ChevronRight size={16} />
+      </button>
+    ),
   };
 
   return (

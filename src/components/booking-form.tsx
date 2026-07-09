@@ -245,12 +245,12 @@ export function BookingForm() {
 
       <div className="form-grid">
         <label>
-          Nom complet
+          <span className="text-gradient">Nom complet</span>
           <input name="name" minLength={2} placeholder="Votre nom" required />
         </label>
 
         <label>
-          Téléphone
+          <span className="text-gradient">Téléphone</span>
           <input
             name="phone"
             inputMode="tel"
@@ -261,13 +261,13 @@ export function BookingForm() {
         </label>
 
         <label className="email-field">
-          Email
+          <span className="text-gradient">Email</span>
           <input name="email" type="email" placeholder="vous@email.com" required />
         </label>
       </div>
 
       <label>
-        Message optionnel
+        <span className="text-gradient">Message optionnel</span>
         <textarea
           name="message"
           placeholder="Inspiration, longueur souhaitée, contrainte horaire..."

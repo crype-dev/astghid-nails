@@ -51,8 +51,8 @@ export default function Home() {
           <Image
             alt="Logo Astghid Nails"
             src="/images/logo.png"
-            width={160}
-            height={160}
+            width={180}
+            height={180}
             className="logo-img"
             priority
           />
@@ -63,10 +63,6 @@ export default function Home() {
         <div className="hero-copy">
           <p className="eyebrow text-gradient">{salon.baseline}</p>
           <h1 className="text-gradient">Des ongles nets, élégants et pensés pour tenir.</h1>
-          <p>
-            Pose gel, semi-permanent, retouches et nail art réalisés avec une
-            attention précise sur la forme, l&apos;hygiène et le rendu final.
-          </p>
           <div className="hero-actions">
             <a className="primary-action" href="#rendez-vous">
               Prendre rendez-vous
@@ -85,31 +81,16 @@ export default function Home() {
             width={760}
           />
           <div className="hero-badge">
-            <strong>4 semaines</strong>
-            <span>retouche recommandée</span>
+            <strong className="text-gradient">4 semaines</strong>
+            <span className="text-gradient">retouche recommandée</span>
           </div>
         </div>
-      </section>
-
-      <section className="trust-band" aria-label="Points forts">
-        {[
-          "Hygiène stricte",
-          "Forme personnalisée",
-          "Tenue longue durée",
-          "Conseil couleur",
-        ].map((item) => (
-          <span key={item}>{item}</span>
-        ))}
       </section>
 
       <section className="split-section" id="tarifs">
         <div className="section-heading compact">
           <p className="eyebrow text-gradient">Tarifs</p>
           <h2 className="text-gradient">Prix lisibles, durée indiquée.</h2>
-          <p>
-            Chaque prestation affiche une durée estimée et un tarif clair pour
-            choisir rapidement le bon rendez-vous.
-          </p>
         </div>
 
         <div className="price-table">
@@ -127,24 +108,16 @@ export default function Home() {
 
       <section className="section muted" id="rendez-vous">
         <div className="section-heading">
-          <p className="eyebrow">Rendez-vous</p>
-          <h2>Réservation en ligne réelle.</h2>
-          <p>
-            Le formulaire vérifie les créneaux disponibles et bloque l&apos;heure
-            choisie dès que le rendez-vous est confirmé.
-          </p>
+          <p className="eyebrow text-gradient">Rendez-vous</p>
+          <h2 className="text-gradient">Réservation en ligne</h2>
         </div>
         <BookingForm />
       </section>
 
       <section className="section" id="galerie">
         <div className="section-heading">
-          <p className="eyebrow">Inspirations</p>
-          <h2>Inspirations et finitions.</h2>
-          <p>
-            Des idées de styles pour préparer votre rendez-vous et préciser la
-            couleur, la forme ou la finition souhaitée.
-          </p>
+          <p className="eyebrow text-gradient">Inspirations</p>
+          <h2 className="text-gradient">Inspirations et finitions.</h2>
         </div>
 
         <div className="filter-row" aria-label="Catégories galerie">
