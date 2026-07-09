@@ -7,7 +7,6 @@ import {
 } from "@/data/site";
 import Image from "next/image";
 
-const featuredServices = services.filter((service) => service.featured);
 const categories = [
   { label: "Gel", value: "gel" },
   { label: "Semi-permanent", value: "semi" },
@@ -52,25 +51,18 @@ export default function Home() {
           <Image
             alt="Logo Astghid Nails"
             src="/images/logo.png"
-            width={96}
-            height={96}
+            width={160}
+            height={160}
             className="logo-img"
             priority
           />
         </a>
-        <nav aria-label="Navigation principale">
-          <a href="#prestations">Prestations</a>
-          <a href="#rendez-vous">Réserver</a>
-          <a href="#tarifs">Tarifs</a>
-          <a href="#galerie">Galerie</a>
-          <a href="#contact">Contact</a>
-        </nav>
       </header>
 
       <section className="hero" id="accueil">
         <div className="hero-copy">
-          <p className="eyebrow">{salon.baseline}</p>
-          <h1>Des ongles nets, élégants et pensés pour tenir.</h1>
+          <p className="eyebrow text-gradient">{salon.baseline}</p>
+          <h1 className="text-gradient">Des ongles nets, élégants et pensés pour tenir.</h1>
           <p>
             Pose gel, semi-permanent, retouches et nail art réalisés avec une
             attention précise sur la forme, l&apos;hygiène et le rendu final.
@@ -110,32 +102,10 @@ export default function Home() {
         ))}
       </section>
 
-      <section className="section" id="prestations">
-        <div className="section-heading">
-          <p className="eyebrow">Prestations</p>
-          <h2>Les soins les plus demandés.</h2>
-          <p>
-            Une carte volontairement claire pour réserver rapidement le bon
-            créneau, sans mauvaise surprise.
-          </p>
-        </div>
-
-        <div className="service-grid">
-          {featuredServices.map((service) => (
-            <article className="service-card" key={service.id}>
-              <span>{service.duration} min</span>
-              <h3>{service.name}</h3>
-              <p>{service.description}</p>
-              <strong>{service.price}</strong>
-            </article>
-          ))}
-        </div>
-      </section>
-
       <section className="split-section" id="tarifs">
         <div className="section-heading compact">
-          <p className="eyebrow">Tarifs</p>
-          <h2>Prix lisibles, durée indiquée.</h2>
+          <p className="eyebrow text-gradient">Tarifs</p>
+          <h2 className="text-gradient">Prix lisibles, durée indiquée.</h2>
           <p>
             Chaque prestation affiche une durée estimée et un tarif clair pour
             choisir rapidement le bon rendez-vous.
